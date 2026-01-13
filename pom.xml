@@ -14,6 +14,8 @@
   <properties>
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+    <maven.compiler.version>3.13.0</maven.compiler.version> 
   </properties>
 
   <modules>
@@ -29,15 +31,11 @@
     </site>
   </distributionManagement>
 
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
+  <plugin>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>${maven.compiler.version}</version> <configuration>
+        <release>21</release> </configuration>
+</plugin>
                     <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
                    <artifactId>maven-war-plugin</artifactId>
@@ -221,7 +219,7 @@
   </scm>
 
   <prerequisites>
-    <maven>3.0.3</maven>
+    <maven>3.6.3</maven>
   </prerequisites>
 
 </project>
