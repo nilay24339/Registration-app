@@ -9,55 +9,34 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Maven Project</name>
-  <description>Sample Maven multi-module project.</description>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <!-- Java 21 -->
-    <maven.compiler.release>21</maven.compiler.release>
-
-    <!-- Plugin versions (Java 21 compatible) -->
-    <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-    <maven.surefire.plugin.version>3.5.2</maven.surefire.plugin.version>
-    <maven.war.plugin.version>3.4.0</maven.war.plugin.version>
-    <maven.release.plugin.version>3.1.1</maven.release.plugin.version>
-    <maven.site.plugin.version>4.0.0-M16</maven.site.plugin.version>
-
-    <!-- Testing -->
-    <junit.jupiter.version>5.11.4</junit.jupiter.version>
-    <mockito.version>5.11.0</mockito.version>
-
-    <!-- Static analysis (optional) -->
-    <spotbugs.plugin.version>4.8.6.4</spotbugs.plugin.version>
-  </properties>
-
   <modules>
     <module>server</module>
     <module>webapp</module>
   </modules>
 
-  <!-- Keep only if you actually use mvn site / site:deploy -->
-  <distributionManagement>
-    <site>
-      <id>site-server</id>
-      <name>Test Project Site</name>
-      <url>file:///tmp/maven-project-site</url>
-    </site>
-  </distributionManagement>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>21</maven.compiler.release>
+
+    <!-- Versions -->
+    <junit.version>4.13.2</junit.version>
+    <hamcrest.version>2.2</hamcrest.version>
+    <mockito.version>5.11.0</mockito.version>
+  </properties>
 
   <dependencyManagement>
     <dependencies>
 
-      <!-- NOTE:
-           If your app is Spring Boot 3 / Jakarta EE 9+, you must use jakarta.* APIs.
-           If your app is old and still uses javax.*, stay on javax.*.
-           Java 21 does NOT force jakarta, your framework does. -->
+      <!-- Servlet APIs (choose ONE based on your code/framework) -->
+      <!-- If your code uses javax.servlet.* keep this: -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.1</version>
+        <scope>provided</scope>
+      </dependency>
 
-      <!-- Option A (modern Jakarta - preferred for new apps / Jetty 11 / Tomcat 10.1+) -->
-      <!--
+      <!-- If your code uses jakarta.servlet.* (Spring Boot 3 / Tomcat 10.1 / Jetty 11), then use this instead:
       <dependency>
         <groupId>jakarta.servlet</groupId>
         <artifactId>jakarta.servlet-api</artifactId>
@@ -66,19 +45,25 @@
       </dependency>
       -->
 
-      <!-- Option B (legacy javax - keep if your code imports javax.servlet.*) -->
       <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>javax.servlet-api</artifactId>
-        <version>4.0.1</version>
+        <groupId>javax.servlet.jsp</groupId>
+        <artifactId>javax.servlet.jsp-api</artifactId>
+        <version>2.3.3</version>
         <scope>provided</scope>
       </dependency>
 
-      <!-- Testing (JUnit 5) -->
+      <!-- Test -->
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>${junit.jupiter.version}</version>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>${hamcrest.version}</version>
         <scope>test</scope>
       </dependency>
 
@@ -99,56 +84,37 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>${maven.compiler.plugin.version}</version>
+          <version>3.13.0</version>
           <configuration>
             <release>${maven.compiler.release}</release>
           </configuration>
         </plugin>
 
-        <!-- JUnit 5 runs via Surefire 3.x -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>${maven.surefire.plugin.version}</version>
-          <configuration>
-            <useModulePath>false</useModulePath>
-          </configuration>
+          <version>3.5.2</version>
         </plugin>
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>${maven.war.plugin.version}</version>
+          <version>3.4.0</version>
           <configuration>
             <failOnMissingWebXml>false</failOnMissingWebXml>
           </configuration>
         </plugin>
 
+        <!-- IMPORTANT: Jenkins warning says jetty plugin has no version. If you still use it, pin a version.
+             If you don't use it, remove it from module POM. -->
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>${maven.release.plugin.version}</version>
-          <configuration>
-            <autoVersionSubmodules>true</autoVersionSubmodules>
-          </configuration>
-        </plugin>
-
-        <!-- Optional replacement for FindBugs -->
-        <plugin>
-          <groupId>com.github.spotbugs</groupId>
-          <artifactId>spotbugs-maven-plugin</artifactId>
-          <version>${spotbugs.plugin.version}</version>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>11.0.24</version>
         </plugin>
 
       </plugins>
     </pluginManagement>
   </build>
-
-  <scm>
-    <connection>scm:git:git@github.com:jleetutorial/maven-project.git</connection>
-    <developerConnection>scm:git:git@github.com:jleetutorial/maven-project.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com:jleetutorial/maven-project</url>
-  </scm>
 
 </project>
