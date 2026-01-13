@@ -1,14 +1,23 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page isELIgnored="true" %>
 
-<%! 
-  // JSP Declaration: helper method must be here (NOT inside <% %>)
+<%!
+  // Robust HTML escape for safe output rendering in JSP
   public String esc(String s) {
     if (s == null) return "";
-    return s.replace("&","&amp;")
-            .replace("<","&lt;")
-            .replace(">","&gt;")
-            .replace("\"","&quot;")
-            .replace("'","&#x27;");
+    StringBuilder out = new StringBuilder(s.length());
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      switch (c) {
+        case '&': out.append("&amp;"); break;
+        case '<': out.append("&lt;"); break;
+        case '>': out.append("&gt;"); break;
+        case '"': out.append("&quot;"); break;
+        case '\'': out.append("&#x27;"); break;
+        default: out.append(c);
+      }
+    }
+    return out.toString();
   }
 %>
 
@@ -24,6 +33,10 @@
     response.sendRedirect("register.jsp");
     return;
   }
+
+  // Normalize nulls
+  if (mobile == null) mobile = "";
+  if (email == null) email = "";
 %>
 
 <!DOCTYPE html>
@@ -31,7 +44,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DevOps Learning | Success</title>
+  <title>DevOps Learning | Registration Success</title>
 
   <style>
     :root{
@@ -73,8 +86,28 @@
       border-bottom:1px solid rgba(255,255,255,0.12);
       background: linear-gradient(135deg, rgba(46,229,157,0.22), rgba(79,140,255,0.16), rgba(255,92,171,0.14));
     }
+    .titleRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
     .title{margin:0; font-size:26px; letter-spacing:.2px;}
-    .subtitle{margin:8px 0 0; color:var(--muted); line-height:1.7; font-size:14.5px;}
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:#07131e;
+      background: linear-gradient(135deg, var(--yellow), var(--green));
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+    .subtitle{margin:10px 0 0; color:var(--muted); line-height:1.7; font-size:14.5px;}
     .body{padding:18px 22px 22px;}
     .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
     @media(max-width:700px){.grid{grid-template-columns:1fr}}
@@ -96,6 +129,7 @@
       font-size:15px;
       font-weight:900;
       word-break: break-word;
+      line-height:1.35;
     }
     .actions{
       margin-top: 16px;
@@ -136,7 +170,10 @@
 <body>
   <div class="card">
     <div class="header">
-      <h1 class="title">Registration Successful</h1>
+      <div class="titleRow">
+        <h1 class="title">Registration Successful</h1>
+        <span class="badge">SUCCESS</span>
+      </div>
       <p class="subtitle">Thank you for registering. Below are the details you submitted.</p>
     </div>
 
