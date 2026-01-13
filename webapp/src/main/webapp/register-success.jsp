@@ -1,4 +1,17 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%! 
+  // JSP Declaration: helper method must be here (NOT inside <% %>)
+  public String esc(String s) {
+    if (s == null) return "";
+    return s.replace("&","&amp;")
+            .replace("<","&lt;")
+            .replace(">","&gt;")
+            .replace("\"","&quot;")
+            .replace("'","&#x27;");
+  }
+%>
+
 <%
   request.setCharacterEncoding("UTF-8");
 
@@ -11,14 +24,8 @@
     response.sendRedirect("register.jsp");
     return;
   }
-
-  // Basic HTML escaping (no external library needed)
-  String esc(String s) {
-    if (s == null) return "";
-    return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
-            .replace("\"","&quot;").replace("'","&#x27;");
-  }
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,11 +75,9 @@
     }
     .title{margin:0; font-size:26px; letter-spacing:.2px;}
     .subtitle{margin:8px 0 0; color:var(--muted); line-height:1.7; font-size:14.5px;}
-
     .body{padding:18px 22px 22px;}
     .grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
     @media(max-width:700px){.grid{grid-template-columns:1fr}}
-
     .box{
       border-radius:14px;
       border:1px solid rgba(255,255,255,0.14);
@@ -132,9 +137,7 @@
   <div class="card">
     <div class="header">
       <h1 class="title">Registration Successful</h1>
-      <p class="subtitle">
-        Thank you for registering. Below are the details you submitted.
-      </p>
+      <p class="subtitle">Thank you for registering. Below are the details you submitted.</p>
     </div>
 
     <div class="body">
@@ -164,7 +167,7 @@
     </div>
 
     <div class="footer">
-      CI/CD Demo: Refresh the page after a new Jenkins deployment to confirm updates.
+      CI/CD Demo: Refresh after Jenkins deployment to confirm updates.
     </div>
   </div>
 </body>
