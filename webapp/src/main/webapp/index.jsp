@@ -282,7 +282,8 @@
       </div>
 
       <div class="card-body">
-        <form action="action_page.php" method="post" autocomplete="on">
+      <form action="register-success.jsp" method="post" autocomplete="on">
+
 
           <div class="grid">
             <div class="field">
