@@ -91,7 +91,7 @@
 
   <div class="container">
     <h1>DevOps Learning Registration</h1>
-    <p>Join <b>Virtual TechBox YouTube Channel</b> and start your DevOps journey.</p>
+    <p>Join <b>DevOps Learning YouTube Channel</b> and start your DevOps journey.</p>
 
     <hr>
 
@@ -129,7 +129,7 @@
   </div>
 
   <div class="footer-msg">
-    <h2>Thank You & Happy Learning 🚀</h2>
+    <h2>Thank You & Happy Learning </h2>
     <p>See you again!</p>
   </div>
 
