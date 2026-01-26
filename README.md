@@ -1,4 +1,3 @@
-Below is a **complete, end-to-end, detailed documentation** for your **AWS → Jenkins CI/CD → Tomcat Deployment** project, including **installation steps, configuration, pipeline/job setup, Poll SCM automation, and troubleshooting** (disk/swap, Maven/Java errors, Tomcat 401, JSP errors, etc.). You can copy this into your GitHub `README.md` or internal KT document.
 
 ---
 
